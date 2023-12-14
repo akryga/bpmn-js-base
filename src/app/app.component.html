@@ -1,21 +1,36 @@
 <div #diagram id="diagram"></div>
+<!-- {{fileName || "No file uploaded yet."}} -->
 <div class="d-buttons btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
   <div class="btn-group me-2" role="group" aria-label="Basic">
+    
 
-    <a id="js-upload-diagram" class="active btn  btn-outline-secondary" href="javascript: null" title="Load Sample" (click)="startSample()">
+    <a class="active btn  btn-outline-secondary"
+        (click)="fileUpload.click()">
+        <i class="bi bi-upload"></i>
+    </a>
+    
+   <a id="js-upload-diagram" class="active btn  btn-outline-secondary" href="javascript: null" 
+   title="Load Sample" (click)="startSample()">
       <i class="bi bi-arrow-up-right-square"></i>
     </a>
-    <a id="js-start-diagram" class="active btn  btn-outline-secondary" href="javascript: void(0)" title="Start New" (click)="startNew()">
+    <a id="js-start-diagram" class="active btn  btn-outline-secondary" href="javascript: void(0)" 
+    title="Start New" (click)="startNew()">
       <i class="bi bi-file-earmark-plus"></i>
     </a>
   </div>
 
   <div class="btn-group " role="group" aria-label="Basic">
-    <a id="js-download-diagram" class="btn  btn-outline-secondary" href="javascript: void(0)" title="Download BPMN" #downloadLink>
+    <a id="js-download-diagram" class="btn  btn-outline-secondary" href="javascript: void(0)" 
+    title="Download BPMN" #downloadLink>
       <i class="bi bi-file-earmark-code"></i>
     </a>
-    <a id="js-download-svg" class="btn  btn-outline-secondary" href="javascript: void(0)" title="Download SVG" #downloadSvgLink>
+    <a id="js-download-svg" class="btn  btn-outline-secondary" href="javascript: void(0)" 
+    title="Download SVG" #downloadSvgLink>
       <i class="bi bi-file-image"></i>
     </a>
   </div>
 </div>
+
+<input type="file" class="file-input"
+       (change)="onFileSelected($event)" #fileUpload>
+

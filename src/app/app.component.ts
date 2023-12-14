@@ -12,6 +12,38 @@ export class AppComponent {
   @ViewChild('downloadSvgLink', { static: true }) private downloadSvgLink: ElementRef<HTMLAnchorElement> | undefined;
   
   bpmnModeler: Modeler = new Modeler();
+  onFileSelected(event: any) {
+    
+    const file:File = event.target.files[0];
+    if (file) {
+      // this.fileName = file.name;
+      this.readerFilePromise(file)
+      .then( xml => this.bpmnModeler.importXML(xml)
+        .then(importResult => {
+          this.updateExportLinks(this.bpmnModeler);
+          //clear input value for reloading file with same name next time
+          event.target.value = null;
+        })
+      )
+      .catch(err => alert(err));
+    }
+  }
+
+   readerFilePromise(file: File): Promise<string> {
+
+    // check file api availability
+    if (!window.FileReader) {
+      window.alert(
+        'Looks like you use an older browser that does not support drag and drop. ' +
+        'Try using a modern browser such as Chrome, Firefox or Internet Explorer > 10.');
+    }
+    
+    return new Promise((resolve, reject) => {
+      const fr = new FileReader();
+      fr.onload = () => resolve(fr.result as string);
+      fr.readAsText(file);
+    });
+  }
 
   ngAfterContentInit(): void {
 
