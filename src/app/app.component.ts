@@ -7,66 +7,53 @@ import Modeler from 'bpmn-js/lib/Modeler';
 })
 export class AppComponent {
 
-
-
-  title = 'bpmn-js-app-2';
   @ViewChild('diagram', { static: true }) private el: ElementRef<HTMLDivElement> | undefined;
-  // downloadLink
-  // downloadSvgLink
   @ViewChild('downloadLink', { static: true }) private downloadLink: ElementRef<HTMLAnchorElement> | undefined;
   @ViewChild('downloadSvgLink', { static: true }) private downloadSvgLink: ElementRef<HTMLAnchorElement> | undefined;
+  
   bpmnModeler: Modeler = new Modeler();
 
-  sample: string = "";
-
   ngAfterContentInit(): void {
+
     this.bpmnModeler = new Modeler({ container: this.el?.nativeElement });
     this.bpmnModeler.on('element.changed', (event: any) => {
       this.updateExportLinks(this.bpmnModeler);
     });
   }
 
-  async startNew() {
-    let bpmnXML = await fetch("assets/start.bpmn", {}).then(res => {
-        return res.text();
-      });
-      // import diagram
-      try {
-        await this.bpmnModeler.importXML(bpmnXML);
-        // ...
-      } catch (err) {
-        // err...
-      }
+  startNew(): void {
+
+    fetch("assets/start.bpmn")
+    .then(res => res.text())
+    .then(xml => this.bpmnModeler.importXML(xml)
+      .then(importResult => this.updateExportLinks(this.bpmnModeler))
+    )
+    .catch(err => console.log(err));
   }
-  async startSample() {
-    let bpmnXML = await fetch("assets/0.bpmn", {}).then(res => {
-      return res.text();
-    });
-    // import diagram
-    try {
-      await this.bpmnModeler.importXML(bpmnXML);
-      // ...
-    } catch (err) {
-      // err...
-    }
+
+  startSample(): void {
+
+    fetch("assets/0.bpmn")
+    .then(res =>res.text())
+    .then(xml => this.bpmnModeler.importXML(xml)
+      .then(importResult => this.updateExportLinks(this.bpmnModeler)))
+    .catch(err => console.log(err));
   }
+
   private setEncoded(link: HTMLAnchorElement|undefined, name: string, data: string|undefined): void {
 
     if (data && link) {
       var encodedData = encodeURIComponent(data);
-      link.classList.add('active');
+      link.classList.add('active')
       link.href = 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData;
       link.download = name;
-      // link.addClass('active').attr({
-      //   'href': 'data:application/bpmn20-xml;charset=UTF-8,' + encodedData,
-      //   'download': name
-      // });
     } else {
       link?.classList.remove('active');
     }
   }
 
   async updateExportLinks(bpmnModeler: Modeler) {
+    
     try {
 
       const { svg } = await bpmnModeler.saveSVG();
