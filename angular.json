@@ -31,6 +31,7 @@
               "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn.css",
               "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css",
               "node_modules/bpmn-js-color-picker/colors/color-picker.css",
+              "node_modules/diagram-js-minimap/assets/diagram-js-minimap.css",
               "src/styles.css"
             ],
             "scripts": []
