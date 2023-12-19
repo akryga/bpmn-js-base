@@ -1,6 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
+import minimapModule from 'diagram-js-minimap';
+
 
 
 @Component({
@@ -16,7 +18,8 @@ export class AppComponent {
   
   bpmnModeler: Modeler = new Modeler({ 
       additionalModules: [
-        BpmnColorPickerModule
+        BpmnColorPickerModule,
+        minimapModule
         ]
     });
   onFileSelected(event: any) {
@@ -30,6 +33,9 @@ export class AppComponent {
           this.updateExportLinks(this.bpmnModeler);
           //clear input value for reloading file with same name next time
           event.target.value = null;
+
+          let canvas: any = this.bpmnModeler.get('canvas');
+          canvas?null:canvas.zoom('fit-viewport');
         })
       )
       .catch(err => alert(err));
@@ -55,7 +61,8 @@ export class AppComponent {
   ngAfterContentInit(): void {
 
     this.bpmnModeler = new Modeler({ container: this.el?.nativeElement, additionalModules: [
-      BpmnColorPickerModule
+      BpmnColorPickerModule,
+      minimapModule
       ]});
     this.bpmnModeler.on('element.changed', (event: any) => {
       this.updateExportLinks(this.bpmnModeler);
@@ -77,7 +84,11 @@ export class AppComponent {
     fetch("assets/0.bpmn")
     .then(res =>res.text())
     .then(xml => this.bpmnModeler.importXML(xml)
-      .then(importResult => this.updateExportLinks(this.bpmnModeler)))
+      .then(importResult => { 
+        this.updateExportLinks(this.bpmnModeler);
+        let canvas: any = this.bpmnModeler.get('canvas');
+        canvas?null:canvas.zoom('fit-viewport');
+      }))
     .catch(err => console.log(err));
   }
 
