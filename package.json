@@ -1,5 +1,5 @@
 {
-  "name": "bpmn-js-app-2",
+  "name": "bpmn-js-base",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -21,6 +21,7 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.11.2",
     "bpmn-js": "^16.0.0",
+    "bpmn-js-color-picker": "^0.6.1",
     "diagram-js-minimap": "^4.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

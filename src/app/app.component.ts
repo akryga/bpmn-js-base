@@ -1,5 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import Modeler from 'bpmn-js/lib/Modeler';
+import BpmnColorPickerModule from 'bpmn-js-color-picker';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,7 +14,11 @@ export class AppComponent {
   @ViewChild('downloadLink', { static: true }) private downloadLink: ElementRef<HTMLAnchorElement> | undefined;
   @ViewChild('downloadSvgLink', { static: true }) private downloadSvgLink: ElementRef<HTMLAnchorElement> | undefined;
   
-  bpmnModeler: Modeler = new Modeler();
+  bpmnModeler: Modeler = new Modeler({ 
+      additionalModules: [
+        BpmnColorPickerModule
+        ]
+    });
   onFileSelected(event: any) {
     
     const file:File = event.target.files[0];
@@ -47,7 +54,9 @@ export class AppComponent {
 
   ngAfterContentInit(): void {
 
-    this.bpmnModeler = new Modeler({ container: this.el?.nativeElement });
+    this.bpmnModeler = new Modeler({ container: this.el?.nativeElement, additionalModules: [
+      BpmnColorPickerModule
+      ]});
     this.bpmnModeler.on('element.changed', (event: any) => {
       this.updateExportLinks(this.bpmnModeler);
     });

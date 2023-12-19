@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "bpmn-js-app-2": {
+    "bpmn-js-base": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/bpmn-js-app-2",
+            "outputPath": "dist/bpmn-js-base",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -29,6 +29,8 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "node_modules/bpmn-js/dist/assets/diagram-js.css",
               "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn.css",
+              "node_modules/bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css",
+              "node_modules/bpmn-js-color-picker/colors/color-picker.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -38,8 +40,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "1mb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -64,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "bpmn-js-app-2:build:production"
+              "browserTarget": "bpmn-js-base:build:production"
             },
             "development": {
-              "browserTarget": "bpmn-js-app-2:build:development"
+              "browserTarget": "bpmn-js-base:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -75,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bpmn-js-app-2:build"
+            "browserTarget": "bpmn-js-base:build"
           }
         },
         "test": {
