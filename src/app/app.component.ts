@@ -2,8 +2,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 import minimapModule from 'diagram-js-minimap';
-
-
+import ruTranslateModule from '../ru-translate/ru-translate'
 
 @Component({
   selector: 'app-root',
@@ -11,7 +10,14 @@ import minimapModule from 'diagram-js-minimap';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-
+  events = [
+    'element.hover',
+    'element.out',
+    'element.click',
+    'element.dblclick',
+    'element.mousedown',
+    'element.mouseup'
+  ];
   @ViewChild('diagram', { static: true }) private el: ElementRef<HTMLDivElement> | undefined;
   @ViewChild('downloadLink', { static: true }) private downloadLink: ElementRef<HTMLAnchorElement> | undefined;
   @ViewChild('downloadSvgLink', { static: true }) private downloadSvgLink: ElementRef<HTMLAnchorElement> | undefined;
@@ -19,11 +25,12 @@ export class AppComponent {
   bpmnModeler: Modeler = new Modeler({ 
       additionalModules: [
         BpmnColorPickerModule,
-        minimapModule
+        minimapModule,
+        ruTranslateModule
         ]
     });
   onFileSelected(event: any) {
-    
+
     const file:File = event.target.files[0];
     if (file) {
       // this.fileName = file.name;
@@ -34,6 +41,7 @@ export class AppComponent {
           //clear input value for reloading file with same name next time
           event.target.value = null;
 
+          this.registerEvents();
           let canvas: any = this.bpmnModeler.get('canvas');
           canvas?null:canvas.zoom('fit-viewport');
         })
@@ -42,7 +50,7 @@ export class AppComponent {
     }
   }
 
-   readerFilePromise(file: File): Promise<string> {
+  readerFilePromise(file: File): Promise<string> {
 
     // check file api availability
     if (!window.FileReader) {
@@ -58,11 +66,24 @@ export class AppComponent {
     });
   }
 
+  registerEvents(){
+    var eb: any = this.bpmnModeler.get('eventBus');
+    this.events.forEach(function(event) {
+      eb.on(event, (e: any) => {
+        // e.element = the model element
+        // e.gfx = the graphical element
+        console.log(event, 'on', e.element.id);
+      });
+    });
+  }
+
   ngAfterContentInit(): void {
 
-    this.bpmnModeler = new Modeler({ container: this.el?.nativeElement, additionalModules: [
-      BpmnColorPickerModule,
-      minimapModule
+    this.bpmnModeler = new Modeler({ container: this.el?.nativeElement, 
+      additionalModules: [
+        BpmnColorPickerModule,
+        minimapModule,
+        ruTranslateModule
       ]});
     this.bpmnModeler.on('element.changed', (event: any) => {
       this.updateExportLinks(this.bpmnModeler);
