@@ -3,6 +3,7 @@ import Modeler from 'bpmn-js/lib/Modeler';
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 import minimapModule from 'diagram-js-minimap';
 import ruTranslateModule from '../ru-translate/ru-translate'
+import { Moddle } from 'bpmn-js/lib/model/Types';
 
 @Component({
   selector: 'app-root',
@@ -91,13 +92,31 @@ export class AppComponent {
   }
 
   startNew(): void {
-
+    this.bpmnModeler.createDiagram()
+    .then(()=>{
+      this.updateExportLinks(this.bpmnModeler);
+      var moddle: Moddle = this.bpmnModeler.get('moddle');
+      var er: any = this.bpmnModeler.get('elementRegistry')
+        var procElement = er.get('Process_1'),
+        proc = procElement.businessObject;
+      // .ids.nextPrefixed(prefix, element);
+      proc.id = (moddle as Moddle).ids.nextPrefixed('Process_', proc);
+      console.log(proc.id)
+    })
+    .catch(console.error);
+/*
     fetch("assets/start.bpmn")
     .then(res => res.text())
     .then(xml => this.bpmnModeler.importXML(xml)
-      .then(importResult => this.updateExportLinks(this.bpmnModeler))
+      .then(importResult => {
+        var er: any = this.bpmnModeler.get('elementRegistry')
+        var procElement = er.get('Process_0bxr3xw'),
+        proc = procElement.businessObject;
+        this.updateExportLinks(this.bpmnModeler);
+
+      })
     )
-    .catch(err => console.log(err));
+    .catch(err => console.log(err));*/
   }
 
   startSample(): void {
