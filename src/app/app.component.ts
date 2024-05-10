@@ -94,29 +94,17 @@ export class AppComponent {
   startNew(): void {
     this.bpmnModeler.createDiagram()
     .then(()=>{
-      this.updateExportLinks(this.bpmnModeler);
+      
       var moddle: Moddle = this.bpmnModeler.get('moddle');
-      var er: any = this.bpmnModeler.get('elementRegistry')
-        var procElement = er.get('Process_1'),
-        proc = procElement.businessObject;
-      // .ids.nextPrefixed(prefix, element);
-      proc.id = (moddle as Moddle).ids.nextPrefixed('Process_', proc);
-      console.log(proc.id)
+      // var er: any = this.bpmnModeler.get('elementRegistry')
+      var procObj = (this.bpmnModeler.get('elementRegistry') as any).get('Process_1').businessObject,
+        startObj = (this.bpmnModeler.get('elementRegistry') as any).get('StartEvent_1').businessObject;
+      procObj.id = (moddle as Moddle).ids.nextPrefixed('Process_', procObj);
+      startObj.id = (moddle as Moddle).ids.nextPrefixed('StartEvent_', startObj);
+      // console.log(proc.id)
+      this.updateExportLinks(this.bpmnModeler);
     })
     .catch(console.error);
-/*
-    fetch("assets/start.bpmn")
-    .then(res => res.text())
-    .then(xml => this.bpmnModeler.importXML(xml)
-      .then(importResult => {
-        var er: any = this.bpmnModeler.get('elementRegistry')
-        var procElement = er.get('Process_0bxr3xw'),
-        proc = procElement.businessObject;
-        this.updateExportLinks(this.bpmnModeler);
-
-      })
-    )
-    .catch(err => console.log(err));*/
   }
 
   startSample(): void {
